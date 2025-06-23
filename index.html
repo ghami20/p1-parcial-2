@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Apple Store | Gamaliel Quiroz</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-<body>
-  <header>
-    <h1> Apple Store | Gamaliel Quiroz</h1>
-  </header>
-  <main>
-    <div id="carrito">
-      <p><span>0</span> productos</p>
-      <p>Total: $<span>0</span></p>
-      <div class="filtros"></div>
-      <button onclick="verCarrito()">Ver carrito</button>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Apple Store | Gamaliel Quiroz</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1> Apple Store | Gamaliel Quiroz</h1>
+    </header>
+    <main>
+      <div id="carrito">
+        <p><span>0</span> productos</p>
+        <p>Total: $<span>0</span></p>
+        <div class="filtros"></div>
+        <button onclick="verCarrito()">Ver carrito</button>
+        <input type="number" id="minPrecio" placeholder="Mínimo" />
+        <input type="number" id="maxPrecio" placeholder="Máximo" />
+        <button onclick="filtrarPorRango()">Filtrar</button>
+      </div>
+      <h2 style="text-align: center">Productos</h2>
+      <div id="productos"></div>
+      <div id="toast" class="toast"></div>
+    </main>
+    <footer>
+      <p>Diseñado para Programación I - Profesor Fabrizio Carlassara</p>
+      <p>
+        <a href="mailto:fabrizio.carlassara@davinci.edu.ar">Contacto docente</a>
+      </p>
+    </footer>
+
+    <script src="scripts/index.js"></script>
+    <div id="modalCarrito" class="modal" style="display: none">
+      <div class="modal-contenido">
+        <a href="#" class="cerrar-modal" onclick="cerrarModalCarrito()">×</a>
+        <h3>Tu Carrito</h3>
+        <div id="contenidoCarrito"></div>
+        <p class="totalCarrito"></p>
+        <button onclick="carrito.vaciarCarrito(); verCarrito();">
+          Vaciar carrito
+        </button>
+      </div>
     </div>
-    <h2 style="text-align: center">Productos</h2>
-    <div id="productos"></div>
-  </main>
-  <footer>
-    <p>Diseñado para Programación I - Profesor Fabrizio Carlassara</p>
-    <p><a href="mailto:fabrizio.carlassara@davinci.edu.ar">Contacto docente</a></p>
-  </footer>
-
-  <script src="scripts/index.js"></script>
-<div id="modalCarrito" class="modal" style="display: none;">
-  <div class="modal-contenido">
-    <a href="#" class="cerrar-modal" onclick="cerrarModalCarrito()">×</a>
-    <h3>Tu Carrito</h3>
-    <div id="contenidoCarrito"></div>
-    <p class="totalCarrito"></p>
-  </div>
-</div>
-
-
-
-</body>
+  </body>
 </html>

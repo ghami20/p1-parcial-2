@@ -2,16 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 :root {
-  --bg: #f1f3f6;
-  --fg: #000000;
-  --accent: #aaa; /* gris */
-  --accent-hover: #888; /* gris más oscuro */
-  --border: #e0e0e0;
+  --bg: #eeeeee;
+  --fg: #222222;
+  --accent: rgba(255 255 255 / 0.2);
+  --accent-hover: rgba(255 255 255 / 0.4);
+  --border: rgba(255 255 255 / 0.25);
   --text-soft: #555;
-  --surface: rgba(255, 255, 255, 0.7);
+  --surface: rgba(255 255 255 / 0.35);
   --blur: blur(16px);
   --radius: 20px;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow: 0 8px 32px rgba(0 0 0 / 0.1);
 }
 
 *,
@@ -29,33 +29,33 @@ body {
   line-height: 1.5;
 }
 
-/* HEADER y FOOTER más compactos */
 header,
 footer {
   background: var(--surface);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   box-shadow: var(--shadow);
-  padding: 0.75rem 1rem; /* reduje el padding para que ocupe menos */
+  padding: 0.75rem 1rem;
   text-align: center;
   position: sticky;
   z-index: 10;
-  font-size: 0.9rem; /* tamaño de texto un poco más pequeño */
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 header {
   top: 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: none;
 }
 
 footer {
   bottom: 0;
-  border-top: 1px solid var(--border);
-  font-size: 0.8rem; /* footer un poco más pequeño */
-  padding: 0.5rem 1rem; /* menos padding también */
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border-top: none;
 }
 
-/* Ajuste para pantallas móviles */
 @media (max-width: 600px) {
   header,
   footer {
@@ -64,7 +64,6 @@ footer {
   }
 }
 
-/* MAIN sigue igual */
 main {
   padding: 2rem 1rem;
   max-width: 1200px;
@@ -87,27 +86,34 @@ p {
   margin: 1rem 0;
 }
 
-/* BOTONES */
 button,
 input[type='button'],
 input[type='submit'] {
   background-color: var(--accent);
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  color: white;
+  color: var(--fg);
   padding: 0.5rem 1rem;
   margin: 0.3rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.1s;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(73, 73, 73, 0.2);
 }
 
 button:hover {
   background-color: var(--accent-hover);
-  transform: scale(1.03);
+  color: var(--fg);
+  transform: scale(1.05);
 }
 
-/* FORMULARIOS */
+button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
 label {
   display: block;
   margin: 1rem 0 0.5rem;
@@ -126,10 +132,9 @@ select {
   color: var(--fg);
   margin-bottom: 1rem;
   backdrop-filter: var(--blur);
-  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 0 10px rgba(255 255 255 / 0.2);
 }
 
-/* PRODUCTOS */
 #productos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -140,17 +145,22 @@ select {
 .producto {
   background: var(--surface);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: 
+    inset 0 1px 1px rgba(255 255 255 / 0.6),
+    0 8px 32px rgba(0 0 0 / 0.1);
   padding: 1rem;
   text-align: center;
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
-  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .producto:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 
+    0 10px 40px rgba(255 255 255 / 0.3),
+    0 10px 30px rgba(0 0 0 / 0.1);
 }
 
 .producto img {
@@ -169,12 +179,11 @@ select {
   font-size: 0.95rem;
 }
 
-/* MINI CARRITO */
 #minicarrito {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--surface);
   backdrop-filter: var(--blur);
   box-shadow: var(--shadow);
   padding: 0.5rem 1rem;
@@ -183,11 +192,10 @@ select {
   max-width: 800px;
 }
 
-/* MODAL: fondo oscuro y texto negro para buen contraste */
 .modal {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* fondo semitransparente oscuro para destacar */
+  background-color: rgba(0 0 0 / 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,20 +205,20 @@ select {
 }
 
 .modal-contenido {
-  background: #fff; /* fondo blanco sólido para buen contraste */
+  background: #fff;
   border-radius: 20px;
   padding: 2rem;
   width: 90%;
   max-width: 500px;
-  color: black; /* texto negro para legibilidad */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  color: var(--fg);
+  box-shadow: 0 8px 32px rgba(0 0 0 / 0.2);
   position: relative;
 }
 
 .modal-contenido h3,
 .modal-contenido p,
 .modal-contenido li {
-  color: black;
+  color: var(--fg);
   text-align: center;
   margin: 0.5rem 0;
 }
@@ -222,7 +230,7 @@ select {
   text-decoration: none;
   font-size: 2rem;
   background: white;
-  color: black;
+  color: var(--fg);
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -230,20 +238,20 @@ select {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0 0 0 / 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .cerrar-modal:hover {
-  background: black;
+  background: var(--fg);
   color: white;
 }
 
-/* Contenido carrito */
 #contenidoCarrito p {
   margin: 0.5rem 0;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0 0 0 / 0.1);
   padding-bottom: 0.5rem;
-  color: black; /* aseguro texto negro en carrito */
+  color: var(--fg);
 }
 
 .totalCarrito {
@@ -251,10 +259,9 @@ select {
   font-weight: bold;
   text-align: center;
   font-size: 1.2rem;
-  color: black; /* texto negro para total */
+  color: var(--fg);
 }
 
-/* FOOTER LINKS */
 footer ul {
   list-style: none;
   padding: 0;
@@ -274,9 +281,32 @@ footer li a:hover {
   text-decoration: underline;
 }
 
-/* Ajuste adicional para footer más compacto en móvil */
 @media (max-width: 600px) {
   footer ul {
     gap: 0.5rem;
   }
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 9999;
+  font-size: 0.9rem;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.producto button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
 }
