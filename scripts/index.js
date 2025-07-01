@@ -54,7 +54,9 @@ class Carrito {
         prod.cantidad++;
         this.guardar();
       } else {
-        alert("No hay más stock disponible para este producto.");
+        //alert("No hay más stock disponible para este producto.");
+        mostrarToast("No hay más stock disponible para este producto", "error");
+
       }
     }
   }
@@ -140,7 +142,10 @@ if (stockRestante > 0) {
     card.append(img, nombre, desc, precio, boton);
     contenedor.appendChild(card);
   });
-}
+}// finaliza render
+
+
+
 function filtrarPorRango() {
   const min = parseInt(document.getElementById("minPrecio").value) || 0;
   const max = parseInt(document.getElementById("maxPrecio").value) || Infinity;
@@ -176,11 +181,13 @@ function renderMiniCarrito() {
 }
 
 function verCarrito() {
+  document.body.style.overflow = "hidden"; 
   const modal = document.getElementById("modalCarrito");
   const contenedor = document.getElementById("contenidoCarrito");
   const total = document.querySelector(".totalCarrito");
-
-  contenedor.innerHTML = "";
+  if (contenedor.contains(total)) {
+    contenedor.removeChild(total);
+  }
 
   if (carrito.productos.length === 0) {
     contenedor.innerHTML = "<p>Tu carrito está vacío.</p>";
@@ -199,54 +206,62 @@ function verCarrito() {
           <button style="margin-left:5px;" onclick="carrito.aumentarCantidad(${p.id}); verCarrito();">+</button>
         </p>
         <p style="margin: 0; font-size: 0.9rem;">Subtotal:  $${(p.precio * p.cantidad).toLocaleString()}</p>
-        <button onclick="comprarProducto(${p.id})" style="margin-top: 0.5rem; padding: 0.3rem 0.6rem; border-radius: 6px; background: #27ae60; color: white; border: none; cursor: pointer;">Comprar</button>
       </div>
     </div>
   `;
 });
+    const btnComprarTodo = document.createElement("button");
+    btnComprarTodo.setAttribute("aria-label", "Confirmar compra de todos los productos del carrito");
+    btnComprarTodo.title = "Confirmar compra de todos los productos del carrito";
+    btnComprarTodo.textContent = "Comprar todo";
+    btnComprarTodo.style = "padding: 0.7rem 1.2rem; background: #2ecc71; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 1rem;";
+    btnComprarTodo.onclick = comprarTodo;
 
+    contenedor.appendChild(btnComprarTodo);
     total.textContent = `Total: $${carrito.totalPrecio().toLocaleString()}`;
   }
 
   modal.style.display = "flex";
-} 
-function comprarProducto(id) {
-  const productoOriginal = productos.find(p => p.id === id);
-  const productoEnCarrito = carrito.productos.find(p => p.id === id);
+} //termina ver carrito
 
-  if (!productoEnCarrito) {
-    alert("Producto no está en el carrito.");
+function comprarTodo() {
+  if (carrito.productos.length === 0) {
+    //alert("Tu carrito está vacío.");
+    mostrarToast("Tu carrito está vacío", "error");
+
     return;
   }
 
-  if (productoOriginal.stock <= 0) {
-    alert("No hay stock disponible para este producto.");
-    return;
+  // Verificamos si hay stock suficiente para todos los productos
+  for (const prodCarrito of carrito.productos) {
+    const prodOriginal = productos.find(p => p.id === prodCarrito.id);
+    if (prodCarrito.cantidad > prodOriginal.stock) {
+      //alert(`No hay suficiente stock para ${prodOriginal.nombre}.`);
+      mostrarToast(`No hay suficiente stock para ${prodOriginal.nombre}`, "error");
+
+      return;
+    }
   }
 
-  if (productoEnCarrito.cantidad > productoOriginal.stock) {
-    alert("No podés comprar más cantidad que el stock disponible.");
-    return;
+  // Descontamos el stock
+  for (const prodCarrito of carrito.productos) {
+    const prodOriginal = productos.find(p => p.id === prodCarrito.id);
+    prodOriginal.stock -= prodCarrito.cantidad;
   }
 
-  // Reducir stock en productos originales
-  productoOriginal.stock -= 1;
+  // Mensaje resumen
+  const total = carrito.totalPrecio().toLocaleString();
+  mostrarToast(`Compra realizada por $${total}`, "ok");
 
-  // Reducir cantidad en carrito o eliminar si llega a 0
-  if (productoEnCarrito.cantidad > 1) {
-    productoEnCarrito.cantidad -= 1;
-  } else {
-    const index = carrito.productos.findIndex(p => p.id === id);
-    if (index > -1) carrito.productos.splice(index, 1);
-  }
-
-  carrito.guardar();
+  // Vaciamos el carrito y actualizamos vistas
+  carrito.vaciarCarrito();
   renderProductos(productos);
   verCarrito();
-  mostrarToast(`Compraste 1 unidad de ${productoOriginal.nombre}`, "ok");
 }
 
+
 function cerrarModalCarrito() {
+  document.body.style.overflow = "auto";
   document.getElementById("modalCarrito").style.display = "none";
 }
 function ordenarPorPrecio(asc = true) {
